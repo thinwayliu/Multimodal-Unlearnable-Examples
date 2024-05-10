@@ -1,0 +1,149 @@
+###########################################################################
+Flicker8K
+
+**************************************************************************
+Clean
+
+python -m src.main --name finetune_clean_flick8k --train_data /data/clip/Flicker-8k/train.csv --eval_test_data_dir /data/clip/Flicker-8k/test.csv --image_key images  --caption_key caption  --device_id 1 --pretrained --lr 1e-5
+**************************************************************************
+EM
+
+python -m src.poison2 --name finetune_poison_flick8k_MM --train_data /data/clip/flickr30k_images/train.csv  --image_key images  --caption_key caption  --device_id 0 --lr 1e-5  
+
+python -m src.poison_main --name finetune_eval_flick8k_MM --train_data /data/clip/Flicker-8k/train.csv --eval_test_data_dir /data/clip/Flicker-8k/test.csv --image_key images  --caption_key caption  --device_id 3 --save_pert finetune_poison_flick8k_MM  --lr 1e-5 --epoch 10  --pretrained
+
+ 
+**************************************************************************
+
+Min-Min-Min
+==>Token3
+
+python -m src.poison0 --name finetune_poison_token_3_shuffle --train_data /data/clip/Flicker-8k/train.csv  --image_key images  --caption_key caption  --device_id 0 --token_num 3 --lr 1e-5 --epoch 10 --pretrained
+
+python -m src.poison_main --name finetune_eval_token_3_shuffle --train_data /data/clip/Flicker-8k/train.csv --eval_test_data_dir /data/clip/Flicker-8k/test.csv --image_key images  --caption_key caption  --device_id 1 --save_pert finetune_poison_token_3_shuffle --token_num 3  --lr 1e-5 --epoch 10  --pretrained
+
+
+Token5
+
+python -m src.poison0 --name finetune_poison_token_5_shuffle --train_data /data/clip/Flicker-8k/train.csv  --image_key images  --caption_key caption  --device_id 1 --token_num 5 --lr 1e-5 --epoch 10 --pretrained
+
+python -m src.poison_main --name finetune_eval_token_5_shuffle --train_data /data/clip/Flicker-8k/train.csv --eval_test_data_dir /data/clip/Flicker-8k/test.csv --image_key images  --caption_key caption  --device_id 1 --save_pert finetune_poison_token_5_shuffle --token_num 5  --lr 1e-5 --epoch 10  --pretrained
+
+
+
+
+###########################################################################
+###########################################################################
+Flicker30k
+
+**************************************************************************
+Clean
+
+python -m src.main --name finetune_clean_flick30k --train_data /data/clip/flickr30k_images/train.csv --eval_test_data_dir /data/clip/flickr30k_images/test.csv --image_key images  --caption_key caption  --device_id 0  --pretrained --lr 1e-5
+
+**************************************************************************
+
+EM
+
+python -m src.poison2 --name finetune_poison_flick30_MM --train_data /data/clip/flickr30k_images/train.csv  --image_key images  --caption_key caption  --device_id 1  --pretrained --lr 1e-5 --epoch 10
+
+python -m src.poison_main --name finetune_eval_flick30_MM --train_data /data/clip/Flicker-8k/train.csv --eval_test_data_dir /data/clip/Flicker-8k/test.csv --image_key images  --caption_key caption  --device_id 0 --save_pert finetune_poison_flick30_MM  --lr 1e-5 --epoch 10 --pretrained
+
+
+**************************************************************************
+TAP
+python -m src.poison3 --name finetune_poison_flick30_TAP --train_data /data/clip/flickr30k_images/train.csv  --image_key images  --caption_key caption  --device_id 2  --lr 1e-5 --pretrained
+
+python -m src.poison_main --name finetune_eval_flick30_TAP --train_data /data/clip/flickr30k_images/train.csv --eval_test_data_dir /data/clip/flickr30k_images/test.csv --image_key images  --caption_key caption  --device_id 2 --save_pert finetune_poison_flick30_TAP  --lr 1e-5 --pretrained
+
+
+**************************************************************************
+
+Min-Min-Min
+==>Token3
+
+python -m src.poison0 --name finetune_flick30_shuffle3 --train_data /data/clip/flickr30k_images/train.csv  --image_key images  --caption_key caption  --device_id 0 --token_num 1 --pretrained --lr 1e-5 --epoch 10
+
+
+python -m src.poison_main --name finetune_eval_flick30_shuffle3 --train_data /data/clip/flickr30k_images/train.csv --eval_test_data_dir /data/clip/flickr30k_images/test.csv --image_key images  --caption_key caption  --device_id 0 --save_pert finetune_flick30_shuffle3 --token_num 3  --pretrained --lr 1e-5 --epoch 10
+
+
+
+==>Token5
+
+python -m src.poison0 --name finetune_flick30_shuffle5 --train_data /data/clip/flickr30k_images/train.csv  --image_key images  --caption_key caption  --device_id 0 --token_num 5 --pretrained --lr 1e-5 --epoch 10
+
+
+python -m src.poison_main --name finetune_eval_flick30_shuffle5 --train_data /data/clip/flickr30k_images/train.csv --eval_test_data_dir /data/clip/flickr30k_images/test.csv --image_key images  --caption_key caption  --device_id 0 --save_pert finetune_flick30_shuffle5 --token_num 5  --pretrained --lr 1e-5 --epoch 10
+
+
+**************************************************************************
+
+Min-Min-Min Noshuffle3
+
+python -m src.poison_noshuffle --name finetune_poison_flick30_noshuffle3 --train_data /data/clip/flickr30k_images/train.csv  --image_key images  --caption_key caption  --device_id 1 --token_num 3 --pretrained --lr 1e-5 --epoch 10
+
+
+python -m src.poison_main --name eval_flick30_noshuffle3 --train_data /data/clip/flickr30k_images/train.csv --eval_test_data_dir /data/clip/flickr30k_images/test.csv --image_key images  --caption_key caption  --device_id 1 --save_pert finetune_poison_flick30_noshuffle3 --token_num 3  --pretrained --lr 1e-5 --epoch 10
+
+
+Min-Min-Min Noshuffle5
+
+python -m src.poison_noshuffle --name finetune_poison_flick30_noshuffle5 --train_data /data/clip/flickr30k_images/train.csv  --image_key images  --caption_key caption  --device_id 1 --token_num 5 --pretrained --lr 1e-5 --epoch 10
+
+
+python -m src.poison_main --name eval_flick30_noshuffle5 --train_data /data/clip/flickr30k_images/train.csv --eval_test_data_dir /data/clip/flickr30k_images/test.csv --image_key images  --caption_key caption  --device_id 2 --save_pert poison_flick30_noshuffle5 --token_num 5  --lr 5e-4
+
+
+
+
+
+###########################################################################
+
+COCO
+
+**************************************************************************
+Clean
+python -m src.main --name finetune_clean_coco --train_data /data/clip/COCO/train.csv --eval_test_data_dir /data/clip/COCO/test.csv --image_key images  --caption_key caption  --device_id 0 --pretrained --lr 1e-5 --epoch 10
+
+
+**************************************************************************
+EM
+
+python -m src.poison2 --name finetune_poison_coco_MM --train_data /data/clip/COCO/train.csv  --image_key images  --caption_key caption  --device_id 2  --lr 1e-5 --pretrained
+
+python -m src.poison_main --name finetune_eval_coco_MM --train_data /data/clip/COCO/train.csv --eval_test_data_dir /data/clip/COCO/test.csv --image_key images  --caption_key caption  --device_id 2 --save_pert finetune_poison_coco_MM  --pretrained --lr 1e-5 --epoch 10
+
+
+**************************************************************************
+TAP
+python -m src.poison3 --name poison_coco_TAP --train_data /data/clip/COCO/train.csv --image_key images  --caption_key caption  --device_id 2  --lr 1e-4 --checkpoint /data/clip/logs/clean_coco/checkpoints/epoch.best.pt
+
+python -m src.poison_main --name eval_coco_TAP --train_data /data/clip/COCO/train.csv --eval_test_data_dir /data/clip/COCO/test.csv --image_key images  --caption_key caption  --device_id 2 --save_pert poison_coco_TAP  --lr 5e-4
+
+
+
+**************************************************************************
+
+Min-Min-Min
+==>Token3
+
+python -m src.poison0 --name finetune_poison_coco_shuffle3 --train_data /data/clip/COCO/train.csv --eval_test_data_dir /data/clip/COCO/test.csv  --image_key images  --caption_key caption  --device_id 3 --token_num 3 --pretrained --lr 1e-5 --epoch 10
+
+
+python -m src.poison_main --name eval_coco_shuffle3 --train_data /data/clip/COCO/train.csv --eval_test_data_dir /data/clip/COCO/test.csv --image_key images  --caption_key caption  --device_id 3 --save_pert poison_coco_shuffle3 --token_num 3  --lr 5e-4
+
+
+
+
+==>Token5
+
+python -m src.poison0 --name finetune_poison_coco_shuffle5 --train_data /data/clip/COCO/train.csv --eval_test_data_dir /data/clip/COCO/test.csv  --image_key images  --caption_key caption  --device_id 2 --token_num 5 --pretrained --lr 1e-5
+
+
+python -m src.poison_main --name eval_coco_shuffle5 --train_data /data/clip/COCO/train.csv --eval_test_data_dir /data/clip/COCO/test.csv --image_key images  --caption_key caption  --device_id 0 --save_pert poison_coco_shuffle5 --token_num 5  --lr 5e-4
+
+
+
+
+
